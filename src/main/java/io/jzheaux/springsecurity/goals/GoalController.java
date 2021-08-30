@@ -1,6 +1,9 @@
 package io.jzheaux.springsecurity.goals;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,11 +40,11 @@ public class GoalController {
 	}
 
 	@PostMapping("/goal")
-	public Goal make(@RequestBody String text) {
-		String owner = "user";
+	public Goal make(@CurrentUsername String owner, @RequestBody String text) {
 		Goal goal = new Goal(text, owner);
 		return this.goals.save(goal);
 	}
+
 
 	@PutMapping(path="/goal/{id}/revise")
 	@Transactional
@@ -76,4 +79,8 @@ public class GoalController {
 		goal.setText(goal.getText() + ", by " + name);
 		return goal;
 	}
+
+
 }
+
+
